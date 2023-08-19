@@ -42,7 +42,8 @@ void printDivisors(int num) {
     * you can aslo find corresponding divisor, which is `num/X`, and is greater than `root_of_num`
     * Therefore, iteration within `root_of_num` would suffice
     */
-    for (int i = 1; i < root_of_num; i++) {
+    //DETAIL: `=` is inclueded, because root_of_num might also be divisor
+    for (int i = 1; i <= root_of_num; i++) {
         /* REASONING:
         * when the result of remainder of i is zero, it means `num` is divisible by `i`
         * , and `num / i` is the quotient
@@ -64,7 +65,12 @@ void printDivisors(int num) {
             * But we want to print them ascendingly,
             * so we store them in stack, which is FILO
             */
-            corresponding_divisors.push(num / i);
+
+            int corresponding_divisor = num / i;
+            //DETAIL: we don't need repeated divisors, only one is printed
+            if (corresponding_divisor != i) {
+                corresponding_divisors.push(num / i);
+            }
         }
     }
 
