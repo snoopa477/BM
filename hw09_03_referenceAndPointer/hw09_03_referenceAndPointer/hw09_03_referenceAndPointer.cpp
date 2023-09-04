@@ -10,6 +10,8 @@ int* getPosNums2(int* arr, int arrSize, int* outPosArrSizePtr);
 void getPosNums3(int* arr, int arrSize, int*& outPosArr, int& outPosArrSize);
 void getPosNums4(int* arr, int arrSize, int** outPosArrPtr, int* outPosArrSizePtr);
 
+int getPosNumsSize(int* arr, int arrSize);
+
 void testAndPrint1(int* arr, int arrSize);
 void testAndPrint2(int* arr, int arrSize);
 void testAndPrint3(int* arr, int arrSize);
@@ -31,17 +33,16 @@ int main()
 
 int* getPosNums1(int* arr, int arrSize, int& outPosArrSize) {
 
-    outPosArrSize = 0;
+    outPosArrSize = getPosNumsSize(arr, arrSize);
     //WRONG! because when this function ends, local var would be cleared due to stack.
     //int new_arr[SIZE] = {};
-    int* new_arr = new int[arrSize];
+    int* new_arr = new int[outPosArrSize];
     int new_index = 0;
 
     for (int i = 0; i < arrSize; i++) {
         if (arr[i] > 0) {
             new_arr[new_index] = arr[i];
             new_index++;
-            outPosArrSize++;
         }
     }
 
@@ -52,15 +53,14 @@ int* getPosNums1(int* arr, int arrSize, int& outPosArrSize) {
 
 int* getPosNums2(int* arr, int arrSize, int* outPosArrSizePtr) {
 
-    *outPosArrSizePtr = 0;
-    int* new_arr = new int[arrSize];
+    *outPosArrSizePtr = getPosNumsSize(arr, arrSize);
+    int* new_arr = new int[*outPosArrSizePtr];
     int new_index = 0;
 
     for (int i = 0; i < arrSize; i++) {
         if (arr[i] > 0) {
             new_arr[new_index] = arr[i];
             new_index++;
-            *outPosArrSizePtr = *outPosArrSizePtr + 1;
         }
     }
 
@@ -71,15 +71,14 @@ int* getPosNums2(int* arr, int arrSize, int* outPosArrSizePtr) {
 
 void getPosNums3(int* arr, int arrSize, int*& outPosArr, int& outPosArrSize) {
 
-    outPosArr = new int[arrSize];
-    outPosArrSize = 0;
+    outPosArrSize = getPosNumsSize(arr, arrSize);
+    outPosArr = new int[outPosArrSize];
     int new_index = 0;
 
     for (int i = 0; i < arrSize; i++) {
         if (arr[i] > 0) {
             outPosArr[new_index] = arr[i];
             new_index++;
-            outPosArrSize++;
         }
     }
 }
@@ -88,19 +87,33 @@ void getPosNums3(int* arr, int arrSize, int*& outPosArr, int& outPosArrSize) {
 
 void getPosNums4(int* arr, int arrSize, int** outPosArrPtr, int* outPosArrSizePtr) {
 
-    *outPosArrPtr = new int[arrSize];
-    *outPosArrSizePtr = 0;
+    *outPosArrSizePtr = getPosNumsSize(arr, arrSize);
+    *outPosArrPtr = new int[*outPosArrSizePtr];
     int new_index = 0;
 
     for (int i = 0; i < arrSize; i++) {
         if (arr[i] > 0) {
             (*outPosArrPtr)[new_index] = arr[i];
             new_index++;
-            *outPosArrSizePtr = *outPosArrSizePtr + 1;
         }
     }
 
 }
+
+
+
+int getPosNumsSize(int* arr, int arrSize) {
+
+    int counter = 0;
+    for (int i = 0; i < arrSize; i++) {
+        if (arr[i] > 0) {
+            counter++;
+        }
+    }
+    return counter;
+}
+
+
 
 void testAndPrint1(int* arr, int arrSize) {
 
