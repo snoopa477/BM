@@ -76,6 +76,7 @@ double findMedianOddSize(int arr[], int arrSize) {
         number_in_arr++;
     }
 
+    delete[] number_to_counter;
     return number_in_arr;
 }
 
@@ -148,6 +149,8 @@ double findMedianEvenSize(int arr[], int arrSize){
     else {
         median_1 = median_2 = number_in_arr;
     }
+
+    delete[] number_to_counter;
 
 
     //WRONG: DETAIL: integer + integer is still integer
