@@ -11,3 +11,5 @@ Debug/
 *.filters
 
 *.user
+
+test_DebugOnArray/
