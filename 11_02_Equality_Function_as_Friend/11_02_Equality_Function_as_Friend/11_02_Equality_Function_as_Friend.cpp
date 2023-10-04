@@ -5,10 +5,10 @@ using namespace std;
 class DayOfYear
 {
 public:
-   friend bool equal(DayOfYear date1, DayOfYear date2);
-   //Precondition: date1 and date2 have values.
-   //Returns true if date1 and date2 represent the same date;
-       //otherwise, returns false.
+    friend bool equal(DayOfYear date1, DayOfYear date2);
+    //Precondition: date1 and date2 have values.
+    //Returns true if date1 and date2 represent the same date;
+    //otherwise, returns false.
     DayOfYear(int the_month, int the_day);
     //Precondition: the_month and the_day form a
     //possible date. Initializes the date according
@@ -56,8 +56,8 @@ int main()
 
 bool equal(DayOfYear date1, DayOfYear date2)
 {
-      return (date1.month == date2.month &&
-              date1.day == date2.day);
+    return (date1.month == date2.month &&
+        date1.day == date2.day);
 }
 
 
