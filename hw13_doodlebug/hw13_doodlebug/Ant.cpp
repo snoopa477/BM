@@ -5,6 +5,7 @@
 #include "Ant.h"
 #include "Common.h"
 #include "Direction.h"
+#include "Species.h"
 
 #include <cstdlib>  
 #include <ctime>  
@@ -12,43 +13,38 @@
 namespace predator_prey_simulation
 {
 
-	Ant::Ant() :Arthropods("Ant")
+	Ant::Ant() :Arthropods(Species::ANT)
 	{};
 
-	void Ant::move()
+	void Ant::move(Arthropods* board[][SIZE], Direction direction)
 	{
 		Direction direction = static_cast<Direction>(rand() % ALL_DIRECTIONS.size());
 
-		switch (direction)
+		StepStatus step_status = get_next_step_status(board, direction);
+
+		int row_offset = 0;
+		int col_offset = 0;
+		if (step_status == StepStatus::EMPTY) 
 		{
-		case Direction::UP:
-			if (0 + 1 < get<ROW_IDX>(coordinate) && get<ROW_IDX>(coordinate) < SIZE)
+			switch (direction) 
 			{
-				get<ROW_IDX>(coordinate) = get<ROW_IDX>(coordinate) - 1;
+			case Direction::UP:
+				row_offset = -1;
+				break;
+			case Direction::DOWN:
+				row_offset = 1;
+				break;
+			case Direction::LEFT:
+				col_offset = -1;
+				break;
+			case Direction::RIGHT:
+				col_offset = 1;
+				break;
 			}
-			break;
-
-		case Direction::DOWN:
-			if (0 < get<ROW_IDX>(coordinate) && get<ROW_IDX>(coordinate) < SIZE -1)
-			{
-				get<ROW_IDX>(coordinate) = get<ROW_IDX>(coordinate) + 1;
-			}
-			break;
-
-		case Direction::LEFT:
-			if (0 + 1 < get<COL_IDX>(coordinate) && get<COL_IDX>(coordinate) < SIZE)
-			{
-				get<COL_IDX>(coordinate) = get<COL_IDX>(coordinate) - 1;
-			}
-			break;
-
-		case Direction::RIGHT:
-			if (0 < get<COL_IDX>(coordinate) && get<COL_IDX>(coordinate) < SIZE - 1)
-			{
-				get<COL_IDX>(coordinate) = get<COL_IDX>(coordinate) + 1;
-			}
-			break;
 		}
+		get<ROW_IDX>(coordinate) = get<ROW_IDX>(coordinate) + row_offset;
+		get<COL_IDX>(coordinate) = get<COL_IDX>(coordinate) + col_offset;
+
 
 	}
 

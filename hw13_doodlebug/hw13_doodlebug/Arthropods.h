@@ -5,6 +5,7 @@
 #include<string>
 #include "StepStatus.h"
 #include "Direction.h"
+#include "Species.h"
 
 using namespace std;
 
@@ -15,12 +16,12 @@ namespace predator_prey_simulation
     public:
 
         Arthropods();
-        Arthropods(string species);
+        Arthropods(Species species);
 
-        void virtual move() = 0;
+        void virtual move(Arthropods* board[][SIZE], Direction direction) = 0;
         void virtual breed() = 0;
 
-        string get_species();
+        Species get_species();
 
         tuple<int, int> get_coordinate() const;
 
@@ -30,7 +31,7 @@ namespace predator_prey_simulation
         tuple<int, int> coordinate;
 
     private: 
-        string species;
+        Species species;
     };
 }
 #endif //ATHROPODS_H

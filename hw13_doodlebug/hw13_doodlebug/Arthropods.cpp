@@ -19,7 +19,7 @@ namespace predator_prey_simulation
 		get<COL_IDX>(coordinate) = rand() % SIZE;
 	}
 
-	Arthropods::Arthropods(string species) : Arthropods()
+	Arthropods::Arthropods(Species species) : Arthropods()
 	{
 		species = species;
 	}
@@ -30,7 +30,7 @@ namespace predator_prey_simulation
 		return coordinate;
 	}
 
-	string Arthropods::get_species()
+	Species Arthropods::get_species()
 	{
 		return species;
 	}
@@ -43,66 +43,59 @@ namespace predator_prey_simulation
 
 
 		if ( (direction == Direction::UP &&  0 == get<ROW_IDX>(coordinate) )
-			|| (direction == Direction::DOWN && SIZE == get<ROW_IDX>(coordinate))
+			|| (direction == Direction::DOWN && SIZE -1 == get<ROW_IDX>(coordinate))
 			|| (direction == Direction::LEFT && 0 == get<COL_IDX>(coordinate))
-			|| (direction == Direction::RIGHT && SIZE == get<COL_IDX>(coordinate)))
+			|| (direction == Direction::RIGHT && SIZE -1 == get<COL_IDX>(coordinate)))
 		{
 			step_status = StepStatus::OBSTACLE;
+			return step_status;
 		}
 
-		//switch (direction)
-		//{
-		//case Direction::UP:
+		//reaching here means not blocked
 
-		//	//if (0 + 1 < get<ROW_IDX>(coordinate) && get<ROW_IDX>(coordinate) < SIZE)
-		//	if ( 0 + 1 < get<ROW_IDX>(coordinate) )
-		//	{
-
-		//	}
-		//	else 
-		//	{
-		//		step_status = StepStatus::OBSTACLE;
-		//	}
-		//	break;
-
-		//case Direction::DOWN:
-		//	//if (0 < get<ROW_IDX>(coordinate) && get<ROW_IDX>(coordinate) < SIZE - 1)
-		//	if ( get<ROW_IDX>(coordinate) < SIZE - 1)
-		//	{
-
-		//	}
-		//	else
-		//	{
-		//		step_status = StepStatus::OBSTACLE;
-		//	}
-		//	break;
-
-		//case Direction::LEFT:
-		//	//if (0 + 1 < get<COL_IDX>(coordinate) && get<COL_IDX>(coordinate) < SIZE)
-		//	if (0 + 1 < get<COL_IDX>(coordinate) )
-		//	{
-	
-		//	}
-		//	else
-		//	{
-		//		step_status = StepStatus::OBSTACLE;
-		//	}
-		//	break;
-
-		//case Direction::RIGHT:
-		//	//if (0 < get<COL_IDX>(coordinate) && get<COL_IDX>(coordinate) < SIZE - 1)
-		//	if (get<COL_IDX>(coordinate) < SIZE - 1)
-		//	{
-
-		//	}
-		//	else
-		//	{
-		//		step_status = StepStatus::OBSTACLE;
-		//	}
-		//	break;
-		//}
+		//safely assign next step
+		tuple<int, int> next_step = coordinate;
+		switch (direction)
+		{
+		case Direction::UP:
+			get<ROW_IDX>(next_step) = get<ROW_IDX>(next_step) - 1;
+			break;
+		case Direction::DOWN:
+			get<ROW_IDX>(next_step) = get<ROW_IDX>(next_step) + 1;
+			break;
+		case Direction::LEFT:
+			get<COL_IDX>(next_step) = get<COL_IDX>(next_step) - 1;
+			break;
+		case Direction::RIGHT:
+			get<COL_IDX>(next_step) = get<COL_IDX>(next_step) + 1;
+			break;
+		default:
+			break;
+		}
 
 
+		//check is there's something already there
+		
+		if (board[get<ROW_IDX>(next_step)][get<COL_IDX>(next_step)] != NULL)
+		{
+			Arthropods* p_bug = board[get<ROW_IDX>(next_step)][get<COL_IDX>(next_step)];
+			switch (p_bug->get_species())
+			{
+			case Species::ANT:
+					step_status = StepStatus::ANT;
+					break;
+			case Species::DOODLEBUG:
+				step_status = StepStatus::DOODLEBUG;
+				break;
+			case Species::UNDEFINED:
+				step_status = StepStatus::UNDEFINED;
+				break;
+			default:
+				break;
+			}
+		}
+
+		return step_status;
 	}
 
 
