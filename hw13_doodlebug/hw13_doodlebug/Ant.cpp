@@ -13,14 +13,37 @@
 namespace predator_prey_simulation
 {
 
-	Ant::Ant() :Arthropods(Species::ANT)
+	Ant::Ant(Arthropods* board[][SIZE]) :Arthropods(board, Species::ANT)
 	{};
+
+
+	void Ant::move(Arthropods* board[][SIZE])
+	{
+		Direction direction = static_cast<Direction>(rand() % ALL_DIRECTIONS.size());
+		move(board, direction);
+	}
 
 	void Ant::move(Arthropods* board[][SIZE], Direction direction)
 	{
-		Direction direction = static_cast<Direction>(rand() % ALL_DIRECTIONS.size());
+		
+		StepStatus step_status = StepStatus::IDLE;
 
-		StepStatus step_status = get_next_step_status(board, direction);
+		//try until there's no way around
+		int trial = 0;
+		do{
+			if (trial != 0)
+			{
+				direction = next_dirction(direction);
+			}
+			trial++;
+			step_status = get_next_step_status(board, direction);
+		} while ( (step_status == StepStatus::EMPTY || trial == 4 ) == false);
+
+		//wrong if missing this line, will move randamly, overlapping with other
+		if (trial == 4)
+		{
+			step_status = StepStatus::IDLE;
+		}
 
 		int row_offset = 0;
 		int col_offset = 0;
@@ -42,10 +65,21 @@ namespace predator_prey_simulation
 				break;
 			}
 		}
-		get<ROW_IDX>(coordinate) = get<ROW_IDX>(coordinate) + row_offset;
-		get<COL_IDX>(coordinate) = get<COL_IDX>(coordinate) + col_offset;
 
+		//wrong
+		//if (row_offset != 0 && col_offset != 0)
+		if(row_offset!= 0 || col_offset != 0)
+		{ 
+			//cancel its original place on the board
+			board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] = NULL;
 
+			//update its own place
+			get<ROW_IDX>(coordinate) = get<ROW_IDX>(coordinate) + row_offset;
+			get<COL_IDX>(coordinate) = get<COL_IDX>(coordinate) + col_offset;
+
+			//update its new place on the board
+			board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] = this;
+		}
 	}
 
 	void Ant::breed()

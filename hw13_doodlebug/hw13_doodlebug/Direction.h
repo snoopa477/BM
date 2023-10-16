@@ -1,3 +1,6 @@
+#ifndef DIRECTION_H
+#define DIRECTION_H
+
 #include<vector>
 
 using namespace std;
@@ -7,3 +10,6 @@ enum class Direction {
 };
 
 static vector<Direction> ALL_DIRECTIONS({ Direction::UP, Direction::DOWN, Direction::LEFT, Direction::RIGHT });
+
+
+#endif

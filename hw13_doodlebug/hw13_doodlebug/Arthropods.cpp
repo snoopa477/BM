@@ -9,19 +9,30 @@
 
 #include <cstdlib>  
 #include <ctime>  
+#include <iostream>
 
-
+using namespace std;
 namespace predator_prey_simulation
 {
-	Arthropods::Arthropods()
+	Arthropods::Arthropods(Arthropods* board[][SIZE])
 	{
-		get<ROW_IDX>(coordinate) = rand() % SIZE;
-		get<COL_IDX>(coordinate) = rand() % SIZE;
+		//if the place is occupied by other, redo the assignment
+		do {
+			get<ROW_IDX>(coordinate) = rand() % SIZE;
+			get<COL_IDX>(coordinate) = rand() % SIZE;
+		} while (board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] != NULL);
+
+		//register the arthropod on the board
+		board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] = this;
 	}
 
-	Arthropods::Arthropods(Species species) : Arthropods()
+	//wrong
+	//Arthropods::Arthropods(Arthropods* board[][SIZE], Species vspecies) : Arthropods(board)
+	Arthropods::Arthropods(Arthropods* board[][SIZE], Species vspecies) : Arthropods(board)
 	{
-		species = species;
+		//wrong if
+		//species = species
+		species = vspecies;
 	}
 
 
@@ -82,8 +93,9 @@ namespace predator_prey_simulation
 			switch (p_bug->get_species())
 			{
 			case Species::ANT:
-					step_status = StepStatus::ANT;
-					break;
+				step_status = StepStatus::ANT;
+				//cout << "this is ant" << endl;
+				break;
 			case Species::DOODLEBUG:
 				step_status = StepStatus::DOODLEBUG;
 				break;
@@ -97,6 +109,33 @@ namespace predator_prey_simulation
 
 		return step_status;
 	}
+
+
+
+	Direction Arthropods::next_dirction(Direction direction)
+	{
+		Direction next_direction = direction;
+		switch (direction)
+		{
+		case Direction::UP:
+			next_direction = Direction::DOWN;
+			break;
+		case Direction::DOWN:
+			next_direction = Direction::LEFT;
+			break;
+		case Direction::LEFT:
+			next_direction = Direction::RIGHT;
+			break;
+		case Direction::RIGHT:
+			next_direction = Direction::UP;
+			break;
+		default:
+			break;
+		}
+
+		return next_direction;
+	}
+
 
 
 }//salesavitch

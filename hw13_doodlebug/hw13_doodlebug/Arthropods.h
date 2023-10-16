@@ -6,6 +6,7 @@
 #include "StepStatus.h"
 #include "Direction.h"
 #include "Species.h"
+#include "Common.h"
 
 using namespace std;
 
@@ -15,9 +16,10 @@ namespace predator_prey_simulation
     {
     public:
 
-        Arthropods();
-        Arthropods(Species species);
+        Arthropods(Arthropods* board[][SIZE]);
+        Arthropods(Arthropods* board[][SIZE], Species species);
 
+        void virtual move(Arthropods* board[][SIZE]) = 0;
         void virtual move(Arthropods* board[][SIZE], Direction direction) = 0;
         void virtual breed() = 0;
 
@@ -26,6 +28,7 @@ namespace predator_prey_simulation
         tuple<int, int> get_coordinate() const;
 
         StepStatus get_next_step_status( Arthropods* board[][SIZE], Direction direction ) const;
+        Direction next_dirction( Direction direction );
 
     protected:
         tuple<int, int> coordinate;

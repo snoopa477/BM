@@ -10,7 +10,8 @@ namespace predator_prey_simulation
     class Ant : public Arthropods
     {
     public:
-        Ant();
+        Ant(Arthropods* board[][SIZE]);
+        void move(Arthropods* board[][SIZE]) override;
         void move(Arthropods* board[][SIZE], Direction direction) override ;
         void breed() override ;
     private:

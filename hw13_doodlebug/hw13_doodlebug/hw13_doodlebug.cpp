@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include<tuple>
+#include<vector>
 
 using namespace std;
 
@@ -19,12 +20,12 @@ void  print_line(Arthropods* board[]);
 
 
 
-
-
-
-
 int main()
 {
+
+    unsigned seed;
+    seed = (unsigned)time(NULL);
+    srand(seed); 
     //cannot use because it has pure virtual function
     //Arthropods a;
 
@@ -35,26 +36,31 @@ int main()
     //Arthropods* board[SIZE][SIZE] = new Arthropods * [SIZE][SIZE]{};
     Arthropods* board[SIZE][SIZE]{};
 
-    Arthropods* p_ant = new Ant();
+    //test if overlapping
+    //int number = 399;
 
-    tuple<int, int> coord = p_ant->get_coordinate();
+    int number = 10;
 
-    board[get<ROW_IDX>(coord)][get<COL_IDX>(coord)] = p_ant;
+    vector<Arthropods*> p_ants;
 
+    for (int i = 0; i < number; i++) {
+        p_ants.push_back(new Ant(board));
+    }
+
+    //Arthropods* p_ant = new Ant(board);
+
+  
     while (true)
     {
 
         draw_board(board);
 
-        coord = p_ant->get_coordinate();
-        board[get<ROW_IDX>(coord)][get<COL_IDX>(coord)] = NULL;
-        
-        p_ant->move();
-
-        coord = p_ant->get_coordinate();
-        tuple<int, int> coord = p_ant->get_coordinate();
-        board[get<ROW_IDX>(coord)][get<COL_IDX>(coord)] = p_ant;
-
+ 
+        //p_ant->move(board);
+        for (int i = 0; i < number; i++) {
+            p_ants[i]->move(board);
+        }
+    
 
         system("pause");
     }

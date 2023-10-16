@@ -1,3 +1,6 @@
+#ifndef SPECIES_H
+#define SPECIES_H
+
 #include<vector>
 
 using namespace std;
@@ -12,3 +15,4 @@ static vector<Species> ALL_SPECIES(
     Species::ARTHORPODS,
     Species::UNDEFINED });
 
+#endif
