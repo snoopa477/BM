@@ -39,9 +39,10 @@ int main()
     //test if overlapping
     //int number = 399;
 
-    int number = 10;
+    int number = 1;
 
     vector<Arthropods*> p_ants;
+
 
     for (int i = 0; i < number; i++) {
         p_ants.push_back(new Ant(board));
@@ -49,18 +50,38 @@ int main()
 
     //Arthropods* p_ant = new Ant(board);
 
+    Arthropods* p_newbie = NULL;
+    vector<Arthropods*> p_newbies ;
   
     while (true)
     {
+        Arthropods::p_randomManager = new randomManager(4);
 
         draw_board(board);
 
  
         //p_ant->move(board);
-        for (int i = 0; i < number; i++) {
-            p_ants[i]->move(board);
+        
+        //WRONG: p_ants.push_back(p_newbie); affect p_ants.size(), hence inifiting calling 
+
+        //for (int i = 0; i < p_ants.size(); i++) {
+        //    cout << "helle" << p_ants.size() << endl;
+
+        //    if ((p_newbie = p_ants[i]->live(board)) != NULL)
+        //    {
+        //        p_ants.push_back(p_newbie);
+        //    }
+        //}
+
+
+        for (int i = 0; i < p_ants.size(); i++) {
+            if ((p_newbie = p_ants[i]->live(board)) != NULL)
+            {
+                p_newbies.push_back(p_newbie);
+            }
         }
-    
+        p_ants.insert(p_ants.end(), p_newbies.begin(), p_newbies.end());
+        p_newbies.clear();
 
         system("pause");
     }

@@ -7,6 +7,7 @@
 #include "Direction.h"
 #include "Species.h"
 #include "Common.h"
+#include "RandomManager.h"
 
 using namespace std;
 
@@ -17,11 +18,14 @@ namespace predator_prey_simulation
     public:
 
         Arthropods(Arthropods* board[][SIZE]);
-        Arthropods(Arthropods* board[][SIZE], Species species);
+        Arthropods(Arthropods* board[][SIZE], Species vspecies);
 
-        void virtual move(Arthropods* board[][SIZE]) = 0;
-        void virtual move(Arthropods* board[][SIZE], Direction direction) = 0;
-        void virtual breed() = 0;
+        Arthropods(Arthropods* board[][SIZE], tuple<int, int> v_coordinate, Direction direction, Species vspecies);
+
+        virtual void  move(Arthropods* board[][SIZE]) = 0;
+        virtual void  move(Arthropods* board[][SIZE], Direction direction) = 0;
+        virtual Arthropods*  breed(Arthropods* board[][SIZE]) = 0;
+        virtual Arthropods*  live(Arthropods* board[][SIZE]) = 0;
 
         Species get_species();
 
@@ -30,11 +34,21 @@ namespace predator_prey_simulation
         StepStatus get_next_step_status( Arthropods* board[][SIZE], Direction direction ) const;
         Direction next_dirction( Direction direction );
 
+        //return IDLE if no such, else UP, DOWN, LEFT, RIGHT
+        Direction get_neighborhood_such_step_status(Arthropods* board[][SIZE], StepStatus target_step_status);
+
+        static RandomManager* p_randomManager;
+
     protected:
         tuple<int, int> coordinate;
+        int longevity;
+
+        
 
     private: 
         Species species;
     };
+
+    
 }
 #endif //ATHROPODS_H

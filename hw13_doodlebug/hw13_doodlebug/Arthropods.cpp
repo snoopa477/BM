@@ -6,6 +6,7 @@
 #include "Common.h"
 #include "StepStatus.h"
 #include "Direction.h"
+#include "RandomManager.h"
 
 #include <cstdlib>  
 #include <ctime>  
@@ -33,6 +34,39 @@ namespace predator_prey_simulation
 		//wrong if
 		//species = species
 		species = vspecies;
+		longevity = 0;
+	}
+
+
+	Arthropods::Arthropods(Arthropods* board[][SIZE], tuple<int, int> v_coordinate, Direction direction, Species vspecies)
+	{
+		species = vspecies;
+		longevity = 0;
+
+		int row_offset = 0;
+		int col_offset = 0;
+
+		switch (direction)
+		{
+		case Direction::UP:
+			row_offset = -1;
+			break;
+		case Direction::DOWN:
+			row_offset = 1;
+			break;
+		case Direction::LEFT:
+			col_offset = -1;
+			break;
+		case Direction::RIGHT:
+			col_offset = 1;
+			break;
+		}
+
+		get<ROW_IDX>(coordinate) = get<ROW_IDX>(v_coordinate) + row_offset;
+		get<COL_IDX>(coordinate) = get<COL_IDX>(v_coordinate) + col_offset;
+
+		board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] = this;
+
 	}
 
 
@@ -134,6 +168,35 @@ namespace predator_prey_simulation
 		}
 
 		return next_direction;
+	}
+
+
+	Direction Arthropods::get_neighborhood_such_step_status(Arthropods* board[][SIZE], StepStatus target_step_status)
+	{
+
+		vector<Direction> directions{ Direction::UP, Direction::DOWN, Direction::LEFT, Direction::RIGHT};
+
+		RandomManager randomManager(directions.size());
+
+		//for (Direction direction : directions) {
+		//	if (get_next_step_status(board, direction) == target_step_status)
+		//	{
+		//		return direction;
+		//	}
+		//}
+
+		while (randomManager.has_next_index())
+		{
+			Direction direction = directions[randomManager.next_index()];
+			if (get_next_step_status(board, direction) == target_step_status)
+			{
+				return direction;
+			}
+		}
+
+
+		//reaching here means find nothing
+		return Direction::IDLE;
 	}
 
 
