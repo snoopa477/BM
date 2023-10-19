@@ -6,20 +6,22 @@
 #include "Common.h"
 #include "Direction.h"
 #include "Species.h"
-
+#include <iostream>
 
 #include <cstdlib>  
 #include <ctime>  
 
+using namespace std;
+
 namespace predator_prey_simulation
 {
 
-	DoodleBug::DoodleBug(Arthropods* board[][SIZE]) :Arthropods(board, Species::DOODLEBUG)
+	DoodleBug::DoodleBug(Arthropods* board[][SIZEE]) :Arthropods(board, Species::DOODLEBUG)
 	{
 		energy_left = full_energy;
 	};
 
-	DoodleBug::DoodleBug(Arthropods* board[][SIZE], tuple<int, int> v_coordinate, Direction direction)
+	DoodleBug::DoodleBug(Arthropods* board[][SIZEE], tuple<int, int> v_coordinate, Direction direction)
 		:Arthropods(board, v_coordinate, direction, Species::DOODLEBUG)
 	{
 		energy_left = full_energy;
@@ -28,7 +30,7 @@ namespace predator_prey_simulation
 
 
 
-	Arthropods* DoodleBug::breed(Arthropods* board[][SIZE])
+	Arthropods* DoodleBug::breed(Arthropods* board[][SIZEE])
 	{
 
 		//not the breeding time
@@ -55,7 +57,7 @@ namespace predator_prey_simulation
 	}
 
 
-	bool DoodleBug::is_ant_nearby(Arthropods* board[][SIZE]) 
+	bool DoodleBug::is_ant_nearby(Arthropods* board[][SIZEE]) 
 	{
 		Direction direction_to_ant = get_neighborhood_such_step_status(board, StepStatus::ANT);
 
@@ -68,7 +70,7 @@ namespace predator_prey_simulation
 	}
 
 
-	void DoodleBug::hunt_for_nearby_ant(Arthropods* board[][SIZE]) 
+	void DoodleBug::hunt_for_nearby_ant(Arthropods* board[][SIZEE]) 
 	{
 		Direction direction_to_ant = get_neighborhood_such_step_status(board, StepStatus::ANT);
 
@@ -98,13 +100,24 @@ namespace predator_prey_simulation
 			break;
 		}
 
-		delete board[get<ROW_IDX>(ant_coordinate)][get<COL_IDX>(ant_coordinate)];
+		//delete board[get<ROW_IDX>(ant_coordinate)][get<COL_IDX>(ant_coordinate)];
 
+		board[get<ROW_IDX>(ant_coordinate)][get<COL_IDX>(ant_coordinate)]->is_dead = true;
+		board[get<ROW_IDX>(ant_coordinate)][get<COL_IDX>(ant_coordinate)] = NULL;
+		
+		//QUESTION: I don't konw why it doesn't work
+		//board[get<ROW_IDX>(ant_coordinate)][get<COL_IDX>(ant_coordinate)] = this;
+		//board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] = NULL;
+		//coordinate = ant_coordinate;
 
-		board[get<ROW_IDX>(ant_coordinate)][get<COL_IDX>(ant_coordinate)] = this;
-		coordinate = ant_coordinate;
+		board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] = NULL;
+		get<ROW_IDX>(coordinate) = get<ROW_IDX>(ant_coordinate) ;
+		get<COL_IDX>(coordinate) = get<COL_IDX>(ant_coordinate) ;
+		board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] = this;
+
 
 		energy_left = full_energy;
+		//cout << "(" << get<ROW_IDX>(coordinate) << "," << get<COL_IDX>(coordinate)  << ")" << " gonna be eaten " << endl;
 	}
 
 
@@ -114,10 +127,13 @@ namespace predator_prey_simulation
 		return energy_left <= 0;
 	}
 
-	void DoodleBug::starve(Arthropods* board[][SIZE])
+	void DoodleBug::starve(Arthropods* board[][SIZEE])
 	{
 		tuple<int, int> tmp_coordinate = coordinate;
-		delete board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)];
+
+		//delete board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)];
+		is_dead = true;
+		
 		//Question: what if I miss this line? the pointed memory is unused?
 		// wrong, object not exist so cannt access coordinate
 		//board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] = NULL;
@@ -125,7 +141,7 @@ namespace predator_prey_simulation
 	}
 
 
-	Arthropods* DoodleBug::live(Arthropods* board[][SIZE])
+	Arthropods* DoodleBug::live(Arthropods* board[][SIZEE])
 	{
 		energy_left--;
 		longevity++;

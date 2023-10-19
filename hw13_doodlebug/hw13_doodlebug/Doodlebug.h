@@ -13,19 +13,21 @@ namespace predator_prey_simulation
     class DoodleBug : public Arthropods
     {
     public:
-        DoodleBug(Arthropods* board[][SIZE]);
-        DoodleBug(Arthropods* board[][SIZE], tuple<int, int> v_coordinate, Direction direction);
+        DoodleBug(Arthropods* board[][SIZEE]);
+        DoodleBug(Arthropods* board[][SIZEE], tuple<int, int> v_coordinate, Direction direction);
 
 
-        Arthropods* breed(Arthropods* board[][SIZE]) override;
-        Arthropods* live(Arthropods* board[][SIZE]) override;
+        Arthropods* breed(Arthropods* board[][SIZEE]) override;
+        Arthropods* live(Arthropods* board[][SIZEE]) override;
 
         //if no nearby ant, returns IDLE
-        bool is_ant_nearby(Arthropods* board[][SIZE]);
-        void hunt_for_nearby_ant(Arthropods* board[][SIZE]);
+        bool is_ant_nearby(Arthropods* board[][SIZEE]);
+        void hunt_for_nearby_ant(Arthropods* board[][SIZEE]);
 
         bool is_starving();
-        void starve(Arthropods* board[][SIZE]);
+        void starve(Arthropods* board[][SIZEE]);
+
+        
         
     private:
         static const int breeding_frequency = 8;

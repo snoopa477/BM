@@ -14,17 +14,17 @@
 namespace predator_prey_simulation
 {
 
-	Ant::Ant(Arthropods* board[][SIZE]) :Arthropods(board, Species::ANT)
+	Ant::Ant(Arthropods* board[][SIZEE]) :Arthropods(board, Species::ANT)
 	{};
 
-	Ant::Ant(Arthropods* board[][SIZE], tuple<int, int> v_coordinate, Direction direction) 
+	Ant::Ant(Arthropods* board[][SIZEE], tuple<int, int> v_coordinate, Direction direction) 
 		:Arthropods(board, v_coordinate, direction, Species::ANT)
 	{};
 
 
 
 
-	Arthropods* Ant::breed(Arthropods* board[][SIZE])
+	Arthropods* Ant::breed(Arthropods* board[][SIZEE])
 	{
 
 		//not the breeding time
@@ -50,7 +50,7 @@ namespace predator_prey_simulation
 
 	}
 
-	Arthropods* Ant::live(Arthropods* board[][SIZE])
+	Arthropods* Ant::live(Arthropods* board[][SIZEE])
 	{
 		longevity++;
 		move(board);

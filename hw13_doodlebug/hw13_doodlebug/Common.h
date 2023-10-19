@@ -8,7 +8,7 @@
 //extern const int COL_IDX = 1
 
 
-static const int SIZE = 20;
+static const int SIZEE = 20;
 static const int ROW_IDX = 0;
 static const int COL_IDX = 1;
 

@@ -18,12 +18,15 @@ namespace predator_prey_simulation
 	//https://stackoverflow.com/questions/13274876/c-a-member-with-an-in-class-initializer-must-be-const
 	RandomManager*  Arthropods::p_random_direction_getter = new RandomManager( FOUR_DIRECTIONS.size() );
 
-	Arthropods::Arthropods(Arthropods* board[][SIZE])
+	Arthropods::Arthropods(Arthropods* board[][SIZEE])
 	{
+		species = Species::ARTHORPODS;
+		longevity = 0;
+		is_dead = false;
 		//if the place is occupied by other, redo the assignment
 		do {
-			get<ROW_IDX>(coordinate) = rand() % SIZE;
-			get<COL_IDX>(coordinate) = rand() % SIZE;
+			get<ROW_IDX>(coordinate) = rand() % SIZEE;
+			get<COL_IDX>(coordinate) = rand() % SIZEE;
 		} while (board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] != NULL);
 
 		//register the arthropod on the board
@@ -32,19 +35,23 @@ namespace predator_prey_simulation
 
 	//wrong
 	//Arthropods::Arthropods(Arthropods* board[][SIZE], Species vspecies) : Arthropods(board)
-	Arthropods::Arthropods(Arthropods* board[][SIZE], Species vspecies) : Arthropods(board)
+	Arthropods::Arthropods(Arthropods* board[][SIZEE], Species vspecies) : Arthropods(board)
 	{
 		//wrong if
 		//species = species
 		species = vspecies;
 		longevity = 0;
+		//so bad
+		is_dead = false;
 	}
 
 
-	Arthropods::Arthropods(Arthropods* board[][SIZE], tuple<int, int> v_coordinate, Direction direction, Species vspecies)
+	Arthropods::Arthropods(Arthropods* board[][SIZEE], tuple<int, int> v_coordinate, Direction direction, Species vspecies)
 	{
 		species = vspecies;
 		longevity = 0;
+		//so bad
+		is_dead = false;
 
 		int row_offset = 0;
 		int col_offset = 0;
@@ -73,13 +80,13 @@ namespace predator_prey_simulation
 	}
 
 
-	void Arthropods::move(Arthropods* board[][SIZE])
+	void Arthropods::move(Arthropods* board[][SIZEE])
 	{
 		Direction direction = static_cast<Direction>(rand() % ALL_DIRECTIONS.size());
 		move(board, direction);
 	}
 
-	void Arthropods::move(Arthropods* board[][SIZE], Direction direction)
+	void Arthropods::move(Arthropods* board[][SIZEE], Direction direction)
 	{
 
 		StepStatus step_status = StepStatus::IDLE;
@@ -150,16 +157,16 @@ namespace predator_prey_simulation
 	}
 
 
-	StepStatus Arthropods::get_next_step_status(Arthropods* board[][SIZE], Direction direction) const
+	StepStatus Arthropods::get_next_step_status(Arthropods* board[][SIZEE], Direction direction) const
 	{
 
 		StepStatus step_status = StepStatus::EMPTY;
 
 
 		if ( (direction == Direction::UP &&  0 == get<ROW_IDX>(coordinate) )
-			|| (direction == Direction::DOWN && SIZE -1 == get<ROW_IDX>(coordinate))
+			|| (direction == Direction::DOWN && SIZEE -1 == get<ROW_IDX>(coordinate))
 			|| (direction == Direction::LEFT && 0 == get<COL_IDX>(coordinate))
-			|| (direction == Direction::RIGHT && SIZE -1 == get<COL_IDX>(coordinate)))
+			|| (direction == Direction::RIGHT && SIZEE -1 == get<COL_IDX>(coordinate)))
 		{
 			step_status = StepStatus::OBSTACLE;
 			return step_status;
@@ -240,7 +247,7 @@ namespace predator_prey_simulation
 	}
 
 
-	Direction Arthropods::get_neighborhood_such_step_status(Arthropods* board[][SIZE], StepStatus target_step_status)
+	Direction Arthropods::get_neighborhood_such_step_status(Arthropods* board[][SIZEE], StepStatus target_step_status)
 	{
 
 
