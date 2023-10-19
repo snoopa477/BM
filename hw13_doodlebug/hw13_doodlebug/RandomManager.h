@@ -13,6 +13,7 @@ namespace predator_prey_simulation
         RandomManager(int size);
         bool has_next_index();
         int next_index();
+        void reset();
 
     private:
         int size;

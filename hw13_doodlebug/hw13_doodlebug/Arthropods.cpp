@@ -15,6 +15,9 @@
 using namespace std;
 namespace predator_prey_simulation
 {
+	//https://stackoverflow.com/questions/13274876/c-a-member-with-an-in-class-initializer-must-be-const
+	RandomManager*  Arthropods::p_random_direction_getter = new RandomManager( FOUR_DIRECTIONS.size() );
+
 	Arthropods::Arthropods(Arthropods* board[][SIZE])
 	{
 		//if the place is occupied by other, redo the assignment
@@ -67,6 +70,72 @@ namespace predator_prey_simulation
 
 		board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] = this;
 
+	}
+
+
+	void Arthropods::move(Arthropods* board[][SIZE])
+	{
+		Direction direction = static_cast<Direction>(rand() % ALL_DIRECTIONS.size());
+		move(board, direction);
+	}
+
+	void Arthropods::move(Arthropods* board[][SIZE], Direction direction)
+	{
+
+		StepStatus step_status = StepStatus::IDLE;
+
+		//try until there's no way around
+		int trial = 0;
+		do {
+			if (trial != 0)
+			{
+				direction = next_dirction(direction);
+			}
+			trial++;
+			step_status = get_next_step_status(board, direction);
+		} while ((step_status == StepStatus::EMPTY || trial == FOUR_DIRECTIONS.size()) == false);
+
+		//wrong if missing this line, will move randamly, overlapping with other
+		if (trial == FOUR_DIRECTIONS.size())
+		{
+			step_status = StepStatus::IDLE;
+		}
+
+		int row_offset = 0;
+		int col_offset = 0;
+		if (step_status == StepStatus::EMPTY)
+		{
+			switch (direction)
+			{
+			case Direction::UP:
+				row_offset = -1;
+				break;
+			case Direction::DOWN:
+				row_offset = 1;
+				break;
+			case Direction::LEFT:
+				col_offset = -1;
+				break;
+			case Direction::RIGHT:
+				col_offset = 1;
+				break;
+			}
+		}
+
+		//wrong
+		//if (row_offset != 0 && col_offset != 0)
+		if (row_offset != 0 || col_offset != 0)
+		{
+			//cancel its original place on the board
+			board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] = NULL;
+
+			//update its own place
+			get<ROW_IDX>(coordinate) = get<ROW_IDX>(coordinate) + row_offset;
+			get<COL_IDX>(coordinate) = get<COL_IDX>(coordinate) + col_offset;
+
+			//update its new place on the board
+			board[get<ROW_IDX>(coordinate)][get<COL_IDX>(coordinate)] = this;
+		}
 	}
 
 
@@ -174,9 +243,8 @@ namespace predator_prey_simulation
 	Direction Arthropods::get_neighborhood_such_step_status(Arthropods* board[][SIZE], StepStatus target_step_status)
 	{
 
-		vector<Direction> directions{ Direction::UP, Direction::DOWN, Direction::LEFT, Direction::RIGHT};
 
-		RandomManager randomManager(directions.size());
+		//RandomManager randomManager(FOUR_DIRECTIONS.size());
 
 		//for (Direction direction : directions) {
 		//	if (get_next_step_status(board, direction) == target_step_status)
@@ -185,9 +253,15 @@ namespace predator_prey_simulation
 		//	}
 		//}
 
-		while (randomManager.has_next_index())
+		p_random_direction_getter->reset();
+		
+		while (p_random_direction_getter->has_next_index())
+		//while (randomManager.has_next_index())
 		{
-			Direction direction = directions[randomManager.next_index()];
+			int next_index = p_random_direction_getter->next_index();
+			//int next_index = randomManager.next_index();
+			
+			Direction direction = FOUR_DIRECTIONS[next_index];
 			if (get_next_step_status(board, direction) == target_step_status)
 			{
 				return direction;

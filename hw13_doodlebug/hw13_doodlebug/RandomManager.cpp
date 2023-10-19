@@ -4,11 +4,12 @@
 //this line is a must
 namespace predator_prey_simulation
 {
-	RandomManager::RandomManager(int size)
+	RandomManager::RandomManager(int vsize)
 	{
-		values = new int[size];
-		last = size - 1;
-		for (int i = 0; i < size; i++)
+		size = vsize;
+		values = new int[vsize];
+		last = vsize - 1;
+		for (int i = 0; i < vsize; i++)
 		{
 			values[i] = i;
 		}
@@ -36,5 +37,11 @@ namespace predator_prey_simulation
 		values[i] = values[j];
 		values[j] = temp;
 	}
+
+	void RandomManager::reset()
+	{
+		last = size - 1;
+	}
+
 
 }

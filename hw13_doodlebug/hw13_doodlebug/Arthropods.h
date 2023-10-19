@@ -22,8 +22,8 @@ namespace predator_prey_simulation
 
         Arthropods(Arthropods* board[][SIZE], tuple<int, int> v_coordinate, Direction direction, Species vspecies);
 
-        virtual void  move(Arthropods* board[][SIZE]) = 0;
-        virtual void  move(Arthropods* board[][SIZE], Direction direction) = 0;
+        virtual void  move(Arthropods* board[][SIZE]);
+        virtual void  move(Arthropods* board[][SIZE], Direction direction);
         virtual Arthropods*  breed(Arthropods* board[][SIZE]) = 0;
         virtual Arthropods*  live(Arthropods* board[][SIZE]) = 0;
 
@@ -37,7 +37,8 @@ namespace predator_prey_simulation
         //return IDLE if no such, else UP, DOWN, LEFT, RIGHT
         Direction get_neighborhood_such_step_status(Arthropods* board[][SIZE], StepStatus target_step_status);
 
-        static RandomManager* p_randomManager;
+        // a member in-class initilizer must be const
+        static RandomManager* p_random_direction_getter;
 
     protected:
         tuple<int, int> coordinate;

@@ -13,8 +13,7 @@ namespace predator_prey_simulation
         Ant(Arthropods* board[][SIZE]);
         Ant(Arthropods* board[][SIZE], tuple<int, int> v_coordinate, Direction direction);
 
-        void move(Arthropods* board[][SIZE]) override;
-        void move(Arthropods* board[][SIZE], Direction direction) override ;
+
         Arthropods* breed(Arthropods* board[][SIZE]) override ;
         Arthropods* live(Arthropods* board[][SIZE]) override;
     private:

@@ -4,6 +4,7 @@
 #include "Ant.h"
 #include "Common.h"
 #include "Arthropods.h"
+#include "Doodlebug.h"
 
 #include <iostream>
 #include<tuple>
@@ -17,7 +18,7 @@ using namespace predator_prey_simulation;
 
 void  draw_board(Arthropods* board[][SIZE]);
 void  print_line(Arthropods* board[]);
-
+string getSymbol(Arthropods* row_of_board[], int j);
 
 
 int main()
@@ -39,23 +40,31 @@ int main()
     //test if overlapping
     //int number = 399;
 
-    int number = 1;
-
+    int ant_number = 1;
     vector<Arthropods*> p_ants;
-
-
-    for (int i = 0; i < number; i++) {
+    for (int i = 0; i < ant_number; i++) {
         p_ants.push_back(new Ant(board));
     }
 
     //Arthropods* p_ant = new Ant(board);
+    Arthropods* p_ant_newbie = NULL;
+    vector<Arthropods*> p_ant_newbies ;
 
-    Arthropods* p_newbie = NULL;
-    vector<Arthropods*> p_newbies ;
+
+
+    int doodlebug_number = 1;
+    vector<Arthropods*> p_doodlebugs;
+    for (int i = 0; i < doodlebug_number; i++) {
+        p_doodlebugs.push_back(new DoodleBug(board));
+    }
+
+    Arthropods* p_doodlebug_newbie = NULL;
+    vector<Arthropods*> p_doodlebug_newbies;
+
   
     while (true)
     {
-        Arthropods::p_randomManager = new randomManager(4);
+        //Arthropods::p_randomManager = new RandomManager(4);
 
         draw_board(board);
 
@@ -74,14 +83,27 @@ int main()
         //}
 
 
-        for (int i = 0; i < p_ants.size(); i++) {
-            if ((p_newbie = p_ants[i]->live(board)) != NULL)
+        for (int i = 0; i < p_doodlebugs.size(); i++) {
+            if ((p_doodlebug_newbie = p_doodlebugs[i]->live(board)) != NULL)
             {
-                p_newbies.push_back(p_newbie);
+                p_doodlebug_newbies.push_back(p_doodlebug_newbie);
             }
         }
-        p_ants.insert(p_ants.end(), p_newbies.begin(), p_newbies.end());
-        p_newbies.clear();
+        p_doodlebugs.insert(p_doodlebugs.end(), p_doodlebug_newbies.begin(), p_doodlebug_newbies.end());
+        p_doodlebug_newbies.clear();
+
+
+
+
+
+        for (int i = 0; i < p_ants.size(); i++) {
+            if ((p_ant_newbie = p_ants[i]->live(board)) != NULL)
+            {
+                p_ant_newbies.push_back(p_ant_newbie);
+            }
+        }
+        p_ants.insert(p_ants.end(), p_ant_newbies.begin(), p_ant_newbies.end());
+        p_ant_newbies.clear();
 
         system("pause");
     }
@@ -107,7 +129,32 @@ void  print_line(Arthropods* row_of_board[]) {
     {
         //this would be 0 1
         //cout << " " << (row_of_board[j] != NULL) ? "o" : "-";
-        cout << " " << ( (row_of_board[j] != NULL) ? "o" : "-" );
+        //cout << " " << ( (row_of_board[j] != NULL) ? "o" : "-" );
+        cout << " " << getSymbol(row_of_board, j);
     }
     cout << endl;
+}
+
+
+string getSymbol(Arthropods* row_of_board[], int j)
+{
+    Arthropods* p_arthropods = row_of_board[j];
+
+    if (p_arthropods == NULL)
+    {
+        return "-";
+    }
+    else if (p_arthropods->get_species() == Species::ANT)
+    {
+        return "o";
+    }
+    else if (p_arthropods->get_species() == Species::ARTHORPODS)
+    {
+        return "x";
+    }
+    else
+    {
+        return "?";
+    }
+
 }

@@ -17,5 +17,11 @@ static vector<Direction> ALL_DIRECTIONS(
     Direction::IDLE
     });
 
+static vector<Direction> FOUR_DIRECTIONS(
+    { Direction::UP,
+    Direction::DOWN,
+    Direction::LEFT,
+    Direction::RIGHT,
+    });
 
 #endif
